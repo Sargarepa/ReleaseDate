@@ -1,6 +1,5 @@
 package com.example.android.releasedate;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
@@ -23,4 +22,14 @@ class Movie {
     @SerializedName("release_date")
     public Date releaseDate;
 
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", genreIds=" + genreIds +
+                ", posterPath='" + posterPath + '\'' +
+                ", releaseDate=" + releaseDate +
+                '}';
+    }
 }

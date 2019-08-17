@@ -31,8 +31,7 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
     public void onBindViewHolder(@NonNull MoviesViewHolder moviesViewHolder, int i) {
         Movie movie = moviesList.get(i);
 
-
-        Date releaseDate = movie.getReleaseDate();
+        Date releaseDate = movie.releaseDate;
         DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.US);
         moviesViewHolder.dateView.setText(formatter.format(releaseDate));
     }
