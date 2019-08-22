@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,6 +20,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAdapter.MovieViewHolder> {
+
+    private String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w500";
 
     private List<Genre> genres = new ArrayList<>();
     private List<Movie> moviesList = new ArrayList<>();
@@ -40,8 +45,13 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
 
 
         Date releaseDate = movie.releaseDate;
-        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.US);
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.US);
         movieViewHolder.dateView.setText(formatter.format(releaseDate));
+
+        Glide.with(movieViewHolder.itemView)
+                .load(IMAGE_BASE_URL + movie.posterPath)
+                .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
+                .into(movieViewHolder.posterView);
     }
 
     @Override
@@ -87,5 +97,6 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
             dateView = view.findViewById(R.id.item_release_date);
 
         }
+
     }
 }
