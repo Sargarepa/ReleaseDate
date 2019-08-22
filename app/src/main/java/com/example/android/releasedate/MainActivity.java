@@ -6,6 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
+import com.example.android.releasedate.Exceptions.MoviesCallbackException;
+
 import java.util.List;
 
 
@@ -24,18 +26,20 @@ public class MainActivity extends AppCompatActivity {
         moviesList = findViewById(R.id.movies_list);
         moviesList.setLayoutManager(new LinearLayoutManager(this));
 
+        adapter = new MoviesRecyclerAdapter();
+
         moviesRepository = MoviesRepository.getInstance();
 
         moviesRepository.getMovies(new MoviesCallback() {
             @Override
             public void onSuccess(List<Movie> movies) {
-                adapter = new MoviesRecyclerAdapter(movies);
+                adapter.setMoviesList(movies);
                 moviesList.setAdapter(adapter);
             }
 
             @Override
-            public void onError() {
-                Toast.makeText(MainActivity.this, "Failed retrieving movie data", Toast.LENGTH_SHORT).show();
+            public void onError(MoviesCallbackException e) {
+                e.printStackTrace();
             }
         });
     }

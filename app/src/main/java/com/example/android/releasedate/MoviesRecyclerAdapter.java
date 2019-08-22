@@ -10,17 +10,15 @@ import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAdapter.MovieViewHolder> {
 
-    private List<Movie> moviesList;
+    private List<Movie> moviesList = new ArrayList<>();
 
-    public MoviesRecyclerAdapter(List<Movie> moviesList) {
-        this.moviesList = moviesList;
-    }
 
     @NonNull
     @Override
@@ -47,6 +45,10 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
     @Override
     public int getItemCount() {
         return moviesList.size();
+    }
+
+    public void setMoviesList(List<Movie> moviesList) {
+        this.moviesList = moviesList;
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder {

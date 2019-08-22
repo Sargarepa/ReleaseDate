@@ -1,5 +1,6 @@
 package com.example.android.releasedate;
 
+import com.example.android.releasedate.Exceptions.MoviesCallbackException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -30,10 +31,12 @@ public class MoviesRepository {
     //Use singleton pattern as the application won't need more than one instance of MoviesRepository
     public static MoviesRepository getInstance() {
         if (moviesRepository == null) {
-            Gson gson = createGsonForRetrofit();
-            Retrofit retrofit = createRetrofitInstance(gson);
+            synchronized (MoviesRepository.class) {
+                Gson gson = createGsonForRetrofit();
+                Retrofit retrofit = createRetrofitInstance(gson);
 
-            moviesRepository = new MoviesRepository(retrofit.create(MoviesRetrofitService.class));
+                moviesRepository = new MoviesRepository(retrofit.create(MoviesRetrofitService.class));
+            }
         }
 
         return moviesRepository;
@@ -49,7 +52,7 @@ public class MoviesRepository {
     private static Retrofit createRetrofitInstance(Gson gson) {
         return new Retrofit.Builder()
                 .client(new OkHttpClient())
-                .baseUrl("https://api.themoviedb.org/")
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
@@ -63,16 +66,16 @@ public class MoviesRepository {
                     if (movies != null && movies.results != null) {
                         callback.onSuccess(movies.results);
                     } else {
-                        callback.onError();
+                        callback.onError(new MoviesCallbackException("Could not retrieve movie data"));
                     }
                 } else {
-                    callback.onError();
+                    callback.onError(new MoviesCallbackException("Could not retrieve movie data"));
                 }
             }
 
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
-                callback.onError();
+                callback.onError(new MoviesCallbackException("Could not retrieve movie data"));
             }
         });
     }
