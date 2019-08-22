@@ -2,6 +2,7 @@ package com.example.android.releasedate;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import java.util.Locale;
 
 public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAdapter.MovieViewHolder> {
 
+    private List<Genre> genres = new ArrayList<>();
     private List<Movie> moviesList = new ArrayList<>();
 
 
@@ -34,7 +36,7 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
         Movie movie = moviesList.get(i);
 
         movieViewHolder.titleView.setText(movie.title);
-        movieViewHolder.genreView.setText(movie.genreIds.toString());
+        movieViewHolder.genreView.setText(getGenres(movie.genreIds));
 
 
         Date releaseDate = movie.releaseDate;
@@ -47,8 +49,25 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
         return moviesList.size();
     }
 
+    private String getGenres(List<Integer> genreIds) {
+        List<String> genreList = new ArrayList<>();
+        for (Integer genreId : genreIds) {
+            for (Genre genre : genres) {
+                if (genreId == genre.id) {
+                    genreList.add(genre.name);
+                    break;
+                }
+            }
+        }
+        return TextUtils.join(", ", genreList);
+    }
+
     public void setMoviesList(List<Movie> moviesList) {
         this.moviesList = moviesList;
+    }
+
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder {

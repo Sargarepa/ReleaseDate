@@ -4,9 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
-import com.example.android.releasedate.Exceptions.MoviesCallbackException;
+import com.example.android.releasedate.Exceptions.TMdBApiException;
 
 import java.util.List;
 
@@ -30,6 +29,18 @@ public class MainActivity extends AppCompatActivity {
 
         moviesRepository = MoviesRepository.getInstance();
 
+        moviesRepository.getGenres(new GenresCallback() {
+            @Override
+            public void onSuccess(List<Genre> genres) {
+                adapter.setGenres(genres);
+            }
+
+            @Override
+            public void onError(TMdBApiException e) {
+                e.printStackTrace();
+            }
+        });
+
         moviesRepository.getMovies(new MoviesCallback() {
             @Override
             public void onSuccess(List<Movie> movies) {
@@ -38,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onError(MoviesCallbackException e) {
+            public void onError(TMdBApiException e) {
                 e.printStackTrace();
             }
         });

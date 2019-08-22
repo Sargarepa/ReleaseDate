@@ -1,11 +1,10 @@
 package com.example.android.releasedate;
 
-import com.example.android.releasedate.Exceptions.MoviesCallbackException;
+import com.example.android.releasedate.Exceptions.TMdBApiException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.Date;
-import java.util.List;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -62,20 +61,43 @@ public class MoviesRepository {
             @Override
             public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
                 if (response.isSuccessful()) {
-                    MoviesResponse movies = response.body();
-                    if (movies != null && movies.results != null) {
-                        callback.onSuccess(movies.results);
+                    MoviesResponse moviesResponse = response.body();
+                    if (moviesResponse != null && moviesResponse.results != null) {
+                        callback.onSuccess(moviesResponse.results);
                     } else {
-                        callback.onError(new MoviesCallbackException("Could not retrieve movie data"));
+                        callback.onError(new TMdBApiException("Could not retrieve movie data"));
                     }
                 } else {
-                    callback.onError(new MoviesCallbackException("Could not retrieve movie data"));
+                    callback.onError(new TMdBApiException("Could not retrieve movie data"));
                 }
             }
 
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
-                callback.onError(new MoviesCallbackException("Could not retrieve movie data"));
+                callback.onError(new TMdBApiException("Could not retrieve movie data"));
+            }
+        });
+    }
+
+    public void getGenres(final GenresCallback callback) {
+        api.getAllGenres(API_KEY).enqueue(new Callback<GenresResponse>() {
+            @Override
+            public void onResponse(Call<GenresResponse> call, Response<GenresResponse> response) {
+                if (response.isSuccessful()) {
+                    GenresResponse genresResponse = response.body();
+                    if (genresResponse != null && genresResponse.genres != null) {
+                        callback.onSuccess(genresResponse.genres);
+                    } else {
+                        callback.onError(new TMdBApiException("Could not retrieve genre data"));
+                    }
+                } else {
+                    callback.onError(new TMdBApiException("Could not retrieve genre data"));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GenresResponse> call, Throwable t) {
+                callback.onError(new TMdBApiException("Could not retrieve genre data"));
             }
         });
     }

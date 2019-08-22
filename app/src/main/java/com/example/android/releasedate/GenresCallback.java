@@ -4,9 +4,9 @@ import com.example.android.releasedate.Exceptions.TMdBApiException;
 
 import java.util.List;
 
-public interface MoviesCallback {
+public interface GenresCallback {
 
-    void onSuccess(List<Movie> movies);
+    void onSuccess(List<Genre> genres);
 
     void onError(TMdBApiException e);
 }
