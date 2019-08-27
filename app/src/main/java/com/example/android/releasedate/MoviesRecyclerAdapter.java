@@ -21,7 +21,7 @@ import java.util.Locale;
 
 public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAdapter.MovieViewHolder> {
 
-    private String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w500";
+    private String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w185";
 
     private List<Genre> genres = new ArrayList<>();
     private List<Movie> moviesList = new ArrayList<>();
@@ -74,6 +74,7 @@ public class MoviesRecyclerAdapter extends RecyclerView.Adapter<MoviesRecyclerAd
 
     public void setMoviesList(List<Movie> moviesList) {
         this.moviesList = moviesList;
+        notifyDataSetChanged();
     }
 
     public void setGenres(List<Genre> genres) {

@@ -18,7 +18,7 @@ public class MoviesRepository {
     private static final String BASE_URL = "https://api.themoviedb.org/";
     private static final String API_KEY = "459e450632dfc0e39bfcc76eff02e6c4";
 
-    private static MoviesRepository moviesRepository;
+    private static volatile MoviesRepository moviesRepository;
 
     private MoviesRetrofitService api;
 
@@ -31,10 +31,12 @@ public class MoviesRepository {
     public static MoviesRepository getInstance() {
         if (moviesRepository == null) {
             synchronized (MoviesRepository.class) {
-                Gson gson = createGsonForRetrofit();
-                Retrofit retrofit = createRetrofitInstance(gson);
+                if (moviesRepository == null) {
+                    Gson gson = createGsonForRetrofit();
+                    Retrofit retrofit = createRetrofitInstance(gson);
 
-                moviesRepository = new MoviesRepository(retrofit.create(MoviesRetrofitService.class));
+                    moviesRepository = new MoviesRepository(retrofit.create(MoviesRetrofitService.class));
+                }
             }
         }
 
